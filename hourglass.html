@@ -11,58 +11,64 @@
             flex-direction: column;
             align-items: center;
             margin: 0;
-            padding: 10px;
-            background-color: #000000;
-            color: #e0e0e0;
+            padding: 10px; 
+            background-color: #000000; 
+            color: #e0e0e0; 
         }
-        #controls {
+        #mainControlsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        #controls, #presets {
             display: flex;
             flex-wrap: wrap;
             gap: 8px; 
             align-items: center;
-            margin-bottom: 10px;
             padding: 10px;
             background-color: #2c2c2c;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
-        #controls label, #controls span, #controls button {
-            font-size: 0.85rem;
+        #controls label, #controls span, #controls button, #presets button {
+            font-size: 0.85rem; 
             color: #e0e0e0;
         }
         #controls input[type="range"] {
-            width: 80px;
+            width: 80px; 
             cursor: pointer;
         }
         #controls input[type="number"] {
-            width: 60px;
+            width: 60px; 
             padding: 4px;
             background-color: #3b3b3b;
             border: 1px solid #555;
             color: #e0e0e0;
             border-radius: 3px;
         }
-        #controls button {
+        #controls button, #presets button {
             padding: 5px 8px;
             background-color: #3498db;
             border: none;
             border-radius: 3px;
             cursor: pointer;
         }
-        #controls button:hover {
+        #controls button:hover, #presets button:hover {
             background-color: #2980b9;
         }
 
         #infoDisplay {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+            gap: 10px; 
+            margin-bottom: 10px; 
+            font-size: 0.85rem; 
             padding: 8px;
             background-color: #2c2c2c;
             border-radius: 5px;
             text-align: center;
+            align-items: center; 
         }
         #infoDisplay span {
             padding: 4px 8px;
@@ -72,10 +78,10 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         #timerDisplay {
-            font-size: 1.1rem;
+            font-size: 1.1rem; 
             font-weight: 600;
             color: #3498db;
-            margin-bottom: 15px;
+            margin-bottom: 15px; 
             padding: 7px 12px;
             background-color: #2c2c2c;
             border-radius: 5px;
@@ -98,32 +104,70 @@
         .control-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 6px; 
+        }
+        #sandProgressContainer {
+            width: 70px; 
+            height: 12px; 
+            background-color: #1a1a1a; 
+            border: 1px solid #555; 
+            border-radius: 3px; 
+            overflow: hidden; 
+            display: inline-block; 
+            vertical-align: middle;
+            margin-left: 5px; 
+        }
+        #sandProgressBar {
+            width: 100%; 
+            height: 100%; 
+            background-color: #F5DEB3; 
+            transition: width 0.1s linear;
+        }
+        #sandPercentageLabel {
+            min-width: 35px; 
+            text-align: right; 
+            display: inline-block; 
+            vertical-align: middle;
+            padding-left: 5px; 
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="controls">
-        <div class="control-group">
-            <label for="maxSandAmountInput">Max Sand:</label>
-            <input type="number" id="maxSandAmountInput" value="5000" min="100" step="100"> <button id="setMaxSandButton">Set Max</button>
+    <div id="mainControlsContainer">
+        <div id="controls">
+            <div class="control-group">
+                <label for="maxSandAmountInput">Max Sand:</label>
+                <input type="number" id="maxSandAmountInput" value="5000" min="100" step="100"> 
+                <button id="setMaxSandButton">Set Max</button>
+            </div>
+            <div class="control-group">
+                <label for="sandAmountSlider">Sand Amount:</label> 
+                <input type="range" id="sandAmountSlider" min="100" max="5000" value="1500" step="50"> 
+                <span id="sandAmountLabel">1500</span>
+            </div>
+            <div class="control-group">
+                <label for="fallSpeedSlider">Fall Speed:</label>
+                <input type="range" id="fallSpeedSlider" min="5" max="500" value="50" step="5"> 
+                <span id="fallSpeedLabel">50ms</span>
+            </div>
         </div>
-        <div class="control-group">
-            <label for="sandAmountSlider">Sand Amount:</label> 
-            <input type="range" id="sandAmountSlider" min="100" max="5000" value="1500" step="50"> 
-            <span id="sandAmountLabel">1500</span>
-        </div>
-        <div class="control-group">
-            <label for="fallSpeedSlider">Fall Speed:</label>
-            <input type="range" id="fallSpeedSlider" min="10" max="200" value="50" step="10"> <span id="fallSpeedLabel">50ms</span>
+        <div id="presets">
+            <button id="presetQuick">Quick Flow</button>
+            <button id="presetStandard">Standard</button>
+            <button id="presetSlow">Slow Drip</button>
         </div>
     </div>
 
     <div id="infoDisplay">
         <span id="neckWidthDisplay">Neck Width: 3</span> 
-        <span id="sandCountDisplay">Sand in top: 0 / 0</span>
+        <span id="sandCountDisplay">Sand: 0 / 0</span> <div class="control-group"> <label style="padding: 4px 0px;">Progress:</label> <div id="sandProgressContainer">
+                <div id="sandProgressBar"></div>
+            </div>
+            <span id="sandPercentageLabel">100%</span>
+        </div>
         <span id="elapsedStepsDisplay">Steps: 0</span>
+        <span id="estimatedTimeDisplay">Est. Time: 00:00</span> 
         <span id="statusDisplay">Status: Idle</span>
     </div>
 
@@ -138,50 +182,49 @@
         const WALL = 2;
         const EMPTY_EXTERNAL = 3; 
 
-        const GRID_COLS_CONFIG = 60;
-        const GRID_ROWS_CONFIG = 90;
-        const CELL_SIZE_CONFIG = 8;
+        const TARGET_PHYSICAL_WIDTH_PX = 480; 
+        const TARGET_PHYSICAL_HEIGHT_PX = 720; 
+
+        let currentCellSize = 8;
+        let currentGridCols = Math.floor(TARGET_PHYSICAL_WIDTH_PX / currentCellSize);
+        let currentGridRows = Math.floor(TARGET_PHYSICAL_HEIGHT_PX / currentCellSize);
         
-        let simulationSpeedMs = 50; // Default simulation speed, controlled by slider
-        let numSandParticles = 1500; 
+        let simulationSpeedMs = 50; 
+        let numSandParticles = 1500;
         let userDefinedMaxSand = 5000; 
+        const FLOW_COEFFICIENT = 0.75; 
+        const MAX_SPAWN_PER_STEP = 5;
 
         const sandColorPalette = ["#F5DEB3", "#DEB887", "#D2B48C"];
         const WALL_COLOR = "#555555";
         const INTERNAL_EMPTY_COLOR = "#2a2a2a"; 
         const CANVAS_BACKGROUND_COLOR = "#000000"; 
 
-        const CAP_HEIGHT_ROWS = 1;
-        const MIN_NECK_WIDTH = 1;
-        const MAX_NECK_WIDTH = Math.floor(GRID_COLS_CONFIG * 0.3);
+        const CAP_HEIGHT_ROWS_PROPORTION = 1; 
+        const MIN_NECK_WIDTH_CELLS = 1;       
         const NECK_DRAG_SENSITIVITY = 15; 
-        const NECK_HEIGHT_CELLS = 1; // Neck is now 1 cell long
+        const NECK_HEIGHT_CELLS_PROPORTION = 1; 
 
-        // --- Canvas and Context ---
         const canvas = document.getElementById('hourglassCanvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = GRID_COLS_CONFIG * CELL_SIZE_CONFIG;
-        canvas.height = GRID_ROWS_CONFIG * CELL_SIZE_CONFIG;
+        canvas.width = currentGridCols * currentCellSize;
+        canvas.height = currentGridRows * currentCellSize;
 
-        // --- Simulation State ---
         let grid;
-        let currentNeckWidth = 3; 
+        let currentNeckWidthCells = 3;  
         let simulationRunning = false;
         let simulationIntervalId;
-        let totalSandParticles = 0; 
-        let initialSandParticlesInTop = 0;
-        let sandInTopChamber = 0;
+        let sandYetToSpawn = 0;
+        let initialSandParticlesInTopBulb = 0;
+        let sandInTopChamber = 0; 
         let elapsedSteps = 0;
         let simulationComplete = false;
         let totalElapsedSeconds = 0;
 
-        // --- Neck Drag State ---
         let isDraggingNeck = false;
         let dragStartX = 0;
-        let initialNeckWidthAtDragStart = 0;
+        let initialNeckWidthAtDragStartCells = 0;
 
-
-        // --- DOM Elements ---
         const maxSandAmountInput = document.getElementById('maxSandAmountInput');
         const setMaxSandButton = document.getElementById('setMaxSandButton');
         const sandAmountSlider = document.getElementById('sandAmountSlider'); 
@@ -190,142 +233,184 @@
         const fallSpeedLabel = document.getElementById('fallSpeedLabel');
         const neckWidthDisplay = document.getElementById('neckWidthDisplay'); 
         const sandCountDisplay = document.getElementById('sandCountDisplay');
+        const sandProgressContainer = document.getElementById('sandProgressContainer');
+        const sandProgressBar = document.getElementById('sandProgressBar');
+        const sandPercentageLabel = document.getElementById('sandPercentageLabel');
         const elapsedStepsDisplay = document.getElementById('elapsedStepsDisplay');
+        const estimatedTimeDisplay = document.getElementById('estimatedTimeDisplay'); 
         const statusDisplay = document.getElementById('statusDisplay');
         const timerDisplay = document.getElementById('timerDisplay');
+        const presetQuickButton = document.getElementById('presetQuick');
+        const presetStandardButton = document.getElementById('presetStandard');
+        const presetSlowButton = document.getElementById('presetSlow');
 
-        // --- Helper Functions for Cell Types ---
-        function isSand(cell) {
-            return typeof cell === 'object' && cell !== null && cell.type === SAND_TYPE;
-        }
-        function isEmptyInternal(cell) { 
-            return cell === EMPTY_INTERNAL;
-        }
-        function isWall(cell) {
-            return cell === WALL;
-        }
-        function getRandomSandColor() {
-            return sandColorPalette[Math.floor(Math.random() * sandColorPalette.length)];
+
+        function isSand(cell) { return typeof cell === 'object' && cell !== null && cell.type === SAND_TYPE; }
+        function isEmptyInternal(cell) { return cell === EMPTY_INTERNAL; }
+        function isWall(cell) { return cell === WALL; }
+        function getRandomSandColor() { return sandColorPalette[Math.floor(Math.random() * sandColorPalette.length)]; }
+        
+        function updateCanvasAndGridDimensions(requestedSandAmount) {
+            const baseSand = 1500;    
+            const highSandTarget = 8000; 
+            const baseCellSize = 8;   
+            const minCellSize = 2;    
+            const maxCellSize = 12;   
+            let newCalculatedCellSize = baseCellSize;
+            if (requestedSandAmount < baseSand && baseSand > 100) { 
+                const scale = (baseSand - requestedSandAmount) / (baseSand - 100);
+                newCalculatedCellSize = baseCellSize + Math.min(1, Math.max(0, scale)) * (maxCellSize - baseCellSize);
+            } else if (requestedSandAmount > baseSand && highSandTarget > baseSand) {
+                const scale = (requestedSandAmount - baseSand) / (highSandTarget - baseSand);
+                newCalculatedCellSize = baseCellSize - Math.min(1, Math.max(0, scale)) * (baseCellSize - minCellSize);
+            }
+            currentCellSize = Math.max(minCellSize, Math.floor(newCalculatedCellSize));
+            if (currentCellSize === 0) currentCellSize = 1; 
+            currentGridCols = Math.floor(TARGET_PHYSICAL_WIDTH_PX / currentCellSize);
+            currentGridRows = Math.floor(TARGET_PHYSICAL_HEIGHT_PX / currentCellSize);
+            if (currentGridCols < 10) currentGridCols = 10; 
+            if (currentGridRows < 15) currentGridRows = 15;
+            canvas.width = currentGridCols * currentCellSize;
+            canvas.height = currentGridRows * currentCellSize;
         }
 
-        // --- Helper: Create Internal Hourglass Boundary ---
-        function getHourglassInternalBoundary(row, neckW) {
-            const centerX = Math.floor(GRID_COLS_CONFIG / 2);
-            const actualDrawingNeckWidth = Math.max(MIN_NECK_WIDTH, Math.min(neckW, MAX_NECK_WIDTH)); 
-            const topBulbStartRow = CAP_HEIGHT_ROWS;
-            
-            const midPointRows = Math.floor(GRID_ROWS_CONFIG / 2);
-            const topBulbEndRow = midPointRows - Math.floor(NECK_HEIGHT_CELLS / 2); // If NECK_HEIGHT_CELLS is 1, this is midpoint
-            const neckEndRow = midPointRows + Math.ceil(NECK_HEIGHT_CELLS / 2);   // If NECK_HEIGHT_CELLS is 1, this is midpoint + 1
-
-            const bottomBulbEndRow = GRID_ROWS_CONFIG - 1 - CAP_HEIGHT_ROWS;
+        function getHourglassInternalBoundary(row, neckWCells) {
+            const centerX = Math.floor(currentGridCols / 2);
+            const maxNeckAllowed = Math.floor(currentGridCols * 0.4);
+            const actualDrawingNeckWidthCells = Math.max(MIN_NECK_WIDTH_CELLS, Math.min(neckWCells, maxNeckAllowed)); 
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION; 
+            const topBulbStartRow = capHeight;
+            const midPointRows = Math.floor(currentGridRows / 2);
+            const neckHeightActualCells = NECK_HEIGHT_CELLS_PROPORTION; 
+            const topBulbEndRow = midPointRows - Math.floor(neckHeightActualCells / 2); 
+            const neckEndRow = midPointRows + Math.ceil(neckHeightActualCells / 2);   
+            const bottomBulbEndRow = currentGridRows - 1 - capHeight;
             let internalLeft, internalRight;
-            const maxBulbWidth = GRID_COLS_CONFIG * 0.85; 
+            const maxBulbWidthProportion = 0.85; 
+            const maxBulbWidthCells = currentGridCols * maxBulbWidthProportion;
             const roundingCells = 2; 
             const roundingWidthReduction = 2;
 
-            if (row >= topBulbEndRow && row < neckEndRow) {
-                internalLeft = Math.floor(centerX - actualDrawingNeckWidth / 2);
-                internalRight = internalLeft + actualDrawingNeckWidth - 1;
-            } else if (row >= topBulbStartRow && row < topBulbEndRow) { // Top bulb
+            if (row >= topBulbEndRow && row < neckEndRow) { 
+                internalLeft = Math.floor(centerX - actualDrawingNeckWidthCells / 2);
+                internalRight = internalLeft + actualDrawingNeckWidthCells - 1;
+            } else if (row >= topBulbStartRow && row < topBulbEndRow) { 
                 const effectiveRowForProgress = row - topBulbStartRow;
                 const totalRowsInBulbSection = topBulbEndRow - topBulbStartRow;
                 const progress = effectiveRowForProgress / Math.max(1, totalRowsInBulbSection); 
-                let currentWidth = maxBulbWidth * (1 - progress) + actualDrawingNeckWidth * progress;
+                let currentWidthCells = maxBulbWidthCells * (1 - progress) + actualDrawingNeckWidthCells * progress;
                 if (effectiveRowForProgress < roundingCells) {
-                    currentWidth -= roundingWidthReduction * (1 - (effectiveRowForProgress / roundingCells));
+                    currentWidthCells -= roundingWidthReduction * (1 - (effectiveRowForProgress / roundingCells));
                 }
-                internalLeft = Math.floor(centerX - currentWidth / 2);
-                internalRight = internalLeft + Math.max(actualDrawingNeckWidth, Math.floor(currentWidth)) - 1;
-            } else if (row >= neckEndRow && row <= bottomBulbEndRow) { // Bottom bulb
+                internalLeft = Math.floor(centerX - currentWidthCells / 2);
+                internalRight = internalLeft + Math.max(actualDrawingNeckWidthCells, Math.floor(currentWidthCells)) - 1;
+            } else if (row >= neckEndRow && row <= bottomBulbEndRow) { 
                 const effectiveRowForProgress = row - neckEndRow;
                 const totalRowsInBulbSection = bottomBulbEndRow - neckEndRow;
                 const progress = effectiveRowForProgress / Math.max(1, totalRowsInBulbSection);
-                let currentWidth = actualDrawingNeckWidth * (1 - progress) + maxBulbWidth * progress;
+                let currentWidthCells = actualDrawingNeckWidthCells * (1 - progress) + maxBulbWidthCells * progress;
                 if (totalRowsInBulbSection - effectiveRowForProgress <= roundingCells) {
-                     currentWidth -= roundingWidthReduction * (1 - ((totalRowsInBulbSection - effectiveRowForProgress -1 ) / roundingCells));
+                     currentWidthCells -= roundingWidthReduction * (1 - ((totalRowsInBulbSection - effectiveRowForProgress -1 ) / roundingCells));
                 }
-                internalLeft = Math.floor(centerX - currentWidth / 2);
-                internalRight = internalLeft + Math.max(actualDrawingNeckWidth, Math.floor(currentWidth)) - 1;
-            } else {
-                return [-1, -1];
-            }
-            return [Math.max(0, internalLeft), Math.min(GRID_COLS_CONFIG - 1, internalRight)];
+                internalLeft = Math.floor(centerX - currentWidthCells / 2);
+                internalRight = internalLeft + Math.max(actualDrawingNeckWidthCells, Math.floor(currentWidthCells)) - 1;
+            } else { return [-1, -1]; }
+            return [Math.max(0, internalLeft), Math.min(currentGridCols - 1, internalRight)];
         }
 
-        // --- Initialization Functions ---
-        function initializeGridAndWalls(neckW) {
-            grid = Array(GRID_ROWS_CONFIG).fill(null).map(() => Array(GRID_COLS_CONFIG).fill(EMPTY_EXTERNAL));
-            for (let r = 0; r < GRID_ROWS_CONFIG; r++) {
-                const [internalLeft, internalRight] = getHourglassInternalBoundary(r, neckW);
-                if (r < CAP_HEIGHT_ROWS || r >= GRID_ROWS_CONFIG - CAP_HEIGHT_ROWS) {
-                    for (let c = 0; c < GRID_COLS_CONFIG; c++) grid[r][c] = WALL;
+        function initializeGridAndWalls(neckWCells) {
+            grid = Array(currentGridRows).fill(null).map(() => Array(currentGridCols).fill(EMPTY_EXTERNAL));
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
+            for (let r = 0; r < currentGridRows; r++) {
+                const [internalLeft, internalRight] = getHourglassInternalBoundary(r, neckWCells);
+                if (r < capHeight || r >= currentGridRows - capHeight) {
+                    for (let c = 0; c < currentGridCols; c++) grid[r][c] = WALL;
                 } else {
                     if (internalLeft === -1) {
-                         for (let c = 0; c < GRID_COLS_CONFIG; c++) grid[r][c] = WALL;
+                         for (let c = 0; c < currentGridCols; c++) grid[r][c] = WALL;
                     } else {
-                        for (let c = 0; c < GRID_COLS_CONFIG; c++) {
-                            if (c >= internalLeft && c <= internalRight) {
-                                grid[r][c] = EMPTY_INTERNAL;
-                            } else {
-                                grid[r][c] = WALL;
-                            }
+                        for (let c = 0; c < currentGridCols; c++) {
+                            if (c >= internalLeft && c <= internalRight) { grid[r][c] = EMPTY_INTERNAL; } 
+                            else { grid[r][c] = WALL; }
                         }
                     }
                 }
             }
-            const [topOpenL, topOpenR] = getHourglassInternalBoundary(CAP_HEIGHT_ROWS, neckW);
+            const [topOpenL, topOpenR] = getHourglassInternalBoundary(capHeight, neckWCells);
              if (topOpenL !== -1) { 
                 for(let c = topOpenL; c <= topOpenR; c++) {
-                    if (isWall(grid[CAP_HEIGHT_ROWS][c])) grid[CAP_HEIGHT_ROWS][c] = EMPTY_INTERNAL;
+                    if (isWall(grid[capHeight][c])) grid[capHeight][c] = EMPTY_INTERNAL;
                 }
             }
         }
 
         function initializeSand() { 
-            let particlesToPlace = numSandParticles; 
-            totalSandParticles = 0; 
-            let particlesPlaced = 0;
-            const topBulbStartRowForSand = CAP_HEIGHT_ROWS;
-            const midPointRows = Math.floor(GRID_ROWS_CONFIG / 2);
-            const topBulbEndRowForSand = midPointRows - Math.floor(NECK_HEIGHT_CELLS / 2);
-
+            let particlesToAttemptToPlaceInBulb = numSandParticles; 
+            let particlesPlacedInBulb = 0;
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
+            const topBulbStartRowForSand = capHeight;
+            const midPointRows = Math.floor(currentGridRows / 2);
+            const neckHeightActualCells = NECK_HEIGHT_CELLS_PROPORTION;
+            const topBulbEndRowForSand = midPointRows - Math.floor(neckHeightActualCells / 2);
 
             for (let r = topBulbEndRowForSand - 1; r >= topBulbStartRowForSand; r--) {
-                const [internalLeft, internalRight] = getHourglassInternalBoundary(r, currentNeckWidth);
+                const [internalLeft, internalRight] = getHourglassInternalBoundary(r, currentNeckWidthCells);
                 if (internalLeft === -1) continue;
                 const centerCol = Math.floor((internalLeft + internalRight) / 2);
                 for (let offset = 0; ; offset++) {
                     let placedInRow = false;
-                    const c1 = centerCol - offset;
-                    const c2 = centerCol + offset;
-                    if (c1 >= internalLeft && isEmptyInternal(grid[r][c1]) && particlesPlaced < particlesToPlace) {
+                    const c1 = centerCol - offset; const c2 = centerCol + offset;
+                    if (c1 >= internalLeft && c1 <= internalRight && isEmptyInternal(grid[r][c1]) && particlesPlacedInBulb < particlesToAttemptToPlaceInBulb) {
                         grid[r][c1] = { type: SAND_TYPE, color: getRandomSandColor() };
-                        particlesPlaced++; placedInRow = true;
+                        particlesPlacedInBulb++; placedInRow = true;
                     }
                     if (c1 === c2) {
-                         if (particlesPlaced >= particlesToPlace) break;
-                         if (!placedInRow && offset > (internalRight - internalLeft)/2 +1) break;
-                         continue;
+                         if (particlesPlacedInBulb >= particlesToAttemptToPlaceInBulb) break;
+                         if (!placedInRow && offset > (internalRight - internalLeft)/2 +1) break; continue;
                     }
-                    if (c2 <= internalRight && isEmptyInternal(grid[r][c2]) && particlesPlaced < particlesToPlace) {
+                    if (c2 <= internalRight && c2 >= internalLeft && isEmptyInternal(grid[r][c2]) && particlesPlacedInBulb < particlesToAttemptToPlaceInBulb) {
                         grid[r][c2] = { type: SAND_TYPE, color: getRandomSandColor() };
-                        particlesPlaced++; placedInRow = true;
+                        particlesPlacedInBulb++; placedInRow = true;
                     }
-                    if (particlesPlaced >= particlesToPlace) break;
+                    if (particlesPlacedInBulb >= particlesToAttemptToPlaceInBulb) break;
                     if (!placedInRow && offset > (internalRight - internalLeft)/2 +1) break;
                 }
-                if (particlesPlaced >= particlesToPlace) break;
+                if (particlesPlacedInBulb >= particlesToAttemptToPlaceInBulb) break;
             }
-            totalSandParticles = particlesPlaced; 
-            countSandInTopChamber(); 
-            initialSandParticlesInTop = sandInTopChamber;
+            initialSandParticlesInTopBulb = particlesPlacedInBulb;
+            sandYetToSpawn = Math.max(0, numSandParticles - initialSandParticlesInTopBulb);
+            
+            countSandInTopChamber();
+            updateSandDisplayAndProgress(); 
+            updateEstimatedTime(); 
         }
+        
+        function refillTopBulb() {
+            if (sandYetToSpawn === 0) return;
+            let spawnedThisStep = 0;
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
+            for (let r = capHeight; r < capHeight + 3 && r < Math.floor(currentGridRows / 2) - Math.floor(NECK_HEIGHT_CELLS_PROPORTION / 2); r++) {
+                const [internalLeft, internalRight] = getHourglassInternalBoundary(r, currentNeckWidthCells);
+                if (internalLeft === -1) continue;
+                for (let c = Math.floor(internalLeft + (internalRight - internalLeft) / 4); 
+                         c <= Math.ceil(internalRight - (internalRight - internalLeft) / 4); c++) {
+                    if (spawnedThisStep >= MAX_SPAWN_PER_STEP || sandYetToSpawn === 0) break;
+                    if (c >= 0 && c < currentGridCols && isEmptyInternal(grid[r][c])) {
+                        grid[r][c] = { type: SAND_TYPE, color: getRandomSandColor() };
+                        sandYetToSpawn--;
+                        spawnedThisStep++;
+                    }
+                }
+                if (spawnedThisStep >= MAX_SPAWN_PER_STEP || sandYetToSpawn === 0) break;
+            }
+        }
+
 
         function getAllSandParticleInfo(currentGrid) {
             const particles = [];
-            for (let r = CAP_HEIGHT_ROWS; r < GRID_ROWS_CONFIG - CAP_HEIGHT_ROWS; r++) {
-                for (let c = 0; c < GRID_COLS_CONFIG; c++) {
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
+            for (let r = capHeight; r < currentGridRows - capHeight; r++) {
+                for (let c = 0; c < currentGridCols; c++) {
                     if (isSand(currentGrid[r][c])) {
                         particles.push({ r, c, particleData: currentGrid[r][c] });
                     }
@@ -346,47 +431,31 @@
             let sandMovedOverall = false;
             const sandParticlesToProcess = getAllSandParticleInfo(grid);
             shuffleArray(sandParticlesToProcess);
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
 
             for (const sandInfo of sandParticlesToProcess) {
-                const r = sandInfo.r;
-                const c = sandInfo.c;
+                const r = sandInfo.r; const c = sandInfo.c;
                 const currentParticleData = sandInfo.particleData;
+                if (!isSand(newGrid[r][c]) || newGrid[r][c].color !== currentParticleData.color) continue; // Already moved or replaced
 
-                if (r + 1 < GRID_ROWS_CONFIG - CAP_HEIGHT_ROWS && isEmptyInternal(grid[r + 1][c])) {
+                if (r + 1 < currentGridRows - capHeight && isEmptyInternal(grid[r + 1][c])) {
                     if (isEmptyInternal(newGrid[r + 1][c])) { 
-                        newGrid[r + 1][c] = currentParticleData; 
-                        newGrid[r][c] = EMPTY_INTERNAL;       
-                        sandMovedOverall = true;
-                        continue; 
+                        newGrid[r + 1][c] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; sandMovedOverall = true; continue; 
                     }
                 }
-
-                const canSlideLeft = (c > 0 && r + 1 < GRID_ROWS_CONFIG - CAP_HEIGHT_ROWS &&
-                                      isEmptyInternal(grid[r + 1][c - 1]) && 
-                                      !isWall(grid[r][c - 1])); 
-                const canSlideRight = (c < GRID_COLS_CONFIG - 1 && r + 1 < GRID_ROWS_CONFIG - CAP_HEIGHT_ROWS &&
-                                       isEmptyInternal(grid[r + 1][c + 1]) &&
-                                       !isWall(grid[r][c + 1])); 
-
+                const canSlideLeft = (c > 0 && r + 1 < currentGridRows - capHeight && isEmptyInternal(grid[r + 1][c - 1]) && !isWall(grid[r][c - 1])); 
+                const canSlideRight = (c < currentGridCols - 1 && r + 1 < currentGridRows - capHeight && isEmptyInternal(grid[r + 1][c + 1]) && !isWall(grid[r][c + 1])); 
                 let movedDiagonallyThisParticle = false;
                 if (canSlideLeft && canSlideRight) {
                     if (Math.random() < 0.5) { 
-                        if (isEmptyInternal(newGrid[r + 1][c - 1])) {
-                            newGrid[r + 1][c - 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;
-                        }
+                        if (isEmptyInternal(newGrid[r + 1][c - 1])) { newGrid[r + 1][c - 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;}
                     } else { 
-                        if (isEmptyInternal(newGrid[r + 1][c + 1])) {
-                            newGrid[r + 1][c + 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;
-                        }
+                        if (isEmptyInternal(newGrid[r + 1][c + 1])) { newGrid[r + 1][c + 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;}
                     }
                 } else if (canSlideLeft) {
-                    if (isEmptyInternal(newGrid[r + 1][c - 1])) {
-                        newGrid[r + 1][c - 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;
-                    }
+                    if (isEmptyInternal(newGrid[r + 1][c - 1])) { newGrid[r + 1][c - 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;}
                 } else if (canSlideRight) {
-                    if (isEmptyInternal(newGrid[r + 1][c + 1])) {
-                        newGrid[r + 1][c + 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;
-                    }
+                    if (isEmptyInternal(newGrid[r + 1][c + 1])) { newGrid[r + 1][c + 1] = currentParticleData; newGrid[r][c] = EMPTY_INTERNAL; movedDiagonallyThisParticle = true;}
                 }
                 if (movedDiagonallyThisParticle) sandMovedOverall = true;
             }
@@ -396,20 +465,15 @@
 
         function drawGrid() {
             ctx.fillStyle = CANVAS_BACKGROUND_COLOR;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let r = 0; r < GRID_ROWS_CONFIG; r++) {
-                for (let c = 0; c < GRID_COLS_CONFIG; c++) {
+            ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            for (let r = 0; r < currentGridRows; r++) {
+                for (let c = 0; c < currentGridCols; c++) {
                     const cell = grid[r][c];
-                    if (isSand(cell)) {
-                        ctx.fillStyle = cell.color;
-                    } else if (isWall(cell)) {
-                        ctx.fillStyle = WALL_COLOR;
-                    } else if (isEmptyInternal(cell)) {
-                        ctx.fillStyle = INTERNAL_EMPTY_COLOR; 
-                    } else { 
-                        continue; 
-                    }
-                    ctx.fillRect(c * CELL_SIZE_CONFIG, r * CELL_SIZE_CONFIG, CELL_SIZE_CONFIG, CELL_SIZE_CONFIG);
+                    if (isSand(cell)) { ctx.fillStyle = cell.color;} 
+                    else if (isWall(cell)) { ctx.fillStyle = WALL_COLOR;} 
+                    else if (isEmptyInternal(cell)) { ctx.fillStyle = INTERNAL_EMPTY_COLOR; } 
+                    else { continue; }
+                    ctx.fillRect(c * currentCellSize, r * currentCellSize, currentCellSize, currentCellSize);
                 }
             }
         }
@@ -420,59 +484,95 @@
             return `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        function countSandInTopChamber() {
-            sandInTopChamber = 0;
-            const midPointRows = Math.floor(GRID_ROWS_CONFIG / 2);
-            const topBulbEndRowForCount = midPointRows - Math.floor(NECK_HEIGHT_CELLS / 2);
+        function formatEstimatedTime(totalSeconds) { 
+            if (totalSeconds === Infinity || isNaN(totalSeconds)) return "Est. Time: --:--";
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `Est. Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        function updateSandDisplayAndProgress() {
+            const totalSandToProcess = numSandParticles;
+            const currentSandRemaining = sandInTopChamber + sandYetToSpawn;
+            sandCountDisplay.textContent = `Sand: ${currentSandRemaining} / ${totalSandToProcess}`;
+            
+            let percentage = 0;
+            if (totalSandToProcess > 0) { 
+                percentage = (currentSandRemaining / totalSandToProcess) * 100;
+            } else if (currentSandRemaining === 0) { 
+                 percentage = 0;
+            }
+            sandProgressBar.style.width = Math.max(0, Math.min(100, percentage)) + '%';
+            sandPercentageLabel.textContent = Math.round(percentage) + '%';
+        }
 
-            for (let r = CAP_HEIGHT_ROWS; r < topBulbEndRowForCount; r++) {
-                for (let c = 0; c < GRID_COLS_CONFIG; c++) {
+        function countSandInTopChamber() {
+            sandInTopChamber = 0; 
+            const midPointRows = Math.floor(currentGridRows / 2);
+            const capHeight = CAP_HEIGHT_ROWS_PROPORTION;
+            const neckHeightActualCells = NECK_HEIGHT_CELLS_PROPORTION;
+            const topBulbEndRowForCount = midPointRows - Math.floor(neckHeightActualCells / 2);
+
+            for (let r = capHeight; r < topBulbEndRowForCount; r++) {
+                for (let c = 0; c < currentGridCols; c++) {
                     if (isSand(grid[r][c])) {
                         sandInTopChamber++;
                     }
                 }
             }
-            sandCountDisplay.textContent = `Sand in top: ${sandInTopChamber} / ${totalSandParticles}`;
+            updateSandDisplayAndProgress(); 
+        }
+
+        function updateEstimatedTime() {
+            const totalSandToEstimate = numSandParticles;
+            if (totalSandToEstimate === 0 || currentNeckWidthCells === 0) {
+                estimatedTimeDisplay.textContent = "Est. Time: 00:00"; return;
+            }
+            const estimatedFlowPerStep = FLOW_COEFFICIENT * currentNeckWidthCells;
+            if (estimatedFlowPerStep <= 0) { 
+                 estimatedTimeDisplay.textContent = "Est. Time: --:--"; return;
+            }
+            const estimatedStepsToEmpty = totalSandToEstimate / estimatedFlowPerStep;
+            const estimatedTimeMs = estimatedStepsToEmpty * simulationSpeedMs;
+            const estimatedTotalSeconds = Math.floor(estimatedTimeMs / 1000);
+            estimatedTimeDisplay.textContent = formatEstimatedTime(estimatedTotalSeconds);
         }
 
         function gameLoop() {
             if (!simulationRunning) return;
+            refillTopBulb();
             const sandMovedThisStep = updateGrid();
             drawGrid();
-            countSandInTopChamber();
+            countSandInTopChamber(); 
             elapsedSteps++;
-            totalElapsedSeconds = Math.floor(elapsedSteps * simulationSpeedMs / 1000);
+            totalElapsedSeconds = Math.floor(elapsedSteps * simulationSpeedMs / 1000); 
             elapsedStepsDisplay.textContent = `Steps: ${elapsedSteps}`;
             timerDisplay.textContent = formatTime(totalElapsedSeconds);
             statusDisplay.textContent = "Status: Running";
 
-            if (sandInTopChamber === 0 && initialSandParticlesInTop > 0 && !simulationComplete) {
-                statusDisplay.textContent = `Status: Top empty at ${elapsedSteps} steps! (${formatTime(totalElapsedSeconds)})`;
-                simulationComplete = true;
+            const allSandProcessed = (sandInTopChamber + sandYetToSpawn) === 0;
+            if (allSandProcessed && !simulationComplete) {
+                if (sandInTopChamber === 0) {
+                     statusDisplay.textContent = `Status: All sand processed at ${elapsedSteps} steps! (${formatTime(totalElapsedSeconds)})`;
+                     simulationComplete = true;
+                }
             }
             
-            if (!sandMovedThisStep && totalSandParticles > 0 && elapsedSteps > 5) { 
-                 if (sandInTopChamber === 0) {
-                    statusDisplay.textContent = `Status: Settled at ${elapsedSteps} steps. (${formatTime(totalElapsedSeconds)})`;
-                 } else {
-                    statusDisplay.textContent = `Status: Jammed/Settled early at ${elapsedSteps} steps. (${formatTime(totalElapsedSeconds)})`;
-                 }
-                 stopSimulation();
-                 return;
+            if (!sandMovedThisStep && sandYetToSpawn === 0 && sandInTopChamber === 0 && elapsedSteps > 5) { 
+                 statusDisplay.textContent = `Status: Settled at ${elapsedSteps} steps. (${formatTime(totalElapsedSeconds)})`;
+                 stopSimulation(); return;
             }
         }
 
         function startPauseSimulation() {
             if (isDraggingNeck) return;
-
             if (simulationRunning) {
                 simulationRunning = false;
                 if (simulationIntervalId) clearInterval(simulationIntervalId);
                 statusDisplay.textContent = "Status: Paused";
             } else {
-                if (simulationComplete && sandInTopChamber === 0) {
-                    statusDisplay.textContent = "Status: Reset (dbl-click) to run again.";
-                    return;
+                if (simulationComplete && sandYetToSpawn === 0 && sandInTopChamber === 0) {
+                    statusDisplay.textContent = "Status: Reset (dbl-click) to run again."; return;
                 }
                 simulationRunning = true;
                 statusDisplay.textContent = "Status: Running";
@@ -485,16 +585,52 @@
             simulationRunning = false;
             if (simulationIntervalId) clearInterval(simulationIntervalId);
         }
+        
+        function applyPreset(sand, neck, speed, maxSandCap = 0) {
+            sandAmountSlider.value = sand;
+            numSandParticles = sand;
+            sandAmountLabel.textContent = sand;
+            const currentMaxSandInputValue = parseInt(maxSandAmountInput.value);
+            let newMaxSand = Math.max(userDefinedMaxSand, sand, maxSandCap);
+            if (isNaN(newMaxSand) || newMaxSand < sand) newMaxSand = sand * 1.2;
+
+            userDefinedMaxSand = Math.max(currentMaxSandInputValue, Math.ceil(newMaxSand / 100) * 100);
+            maxSandAmountInput.value = userDefinedMaxSand;
+            sandAmountSlider.max = userDefinedMaxSand;
+            if (numSandParticles > userDefinedMaxSand) {
+                numSandParticles = userDefinedMaxSand;
+                sandAmountSlider.value = numSandParticles;
+                sandAmountLabel.textContent = numSandParticles;
+            }
+
+
+            currentNeckWidthCells = neck;
+            neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidthCells}`;
+            
+            fallSpeedSlider.value = speed;
+            simulationSpeedMs = speed;
+            fallSpeedLabel.textContent = `${simulationSpeedMs}ms`;
+            
+            resetSimulation();
+        }
+
+        presetQuickButton.addEventListener('click', () => applyPreset(1200, 10, 20, 5000));
+        presetStandardButton.addEventListener('click', () => applyPreset(2000, 5, 50, 5000));
+        presetSlowButton.addEventListener('click', () => applyPreset(3500, 2, 80, 8000));
+
 
         function resetSimulation(isDoubleClick = false) {
             stopSimulation();
             elapsedSteps = 0;
             totalElapsedSeconds = 0;
             simulationComplete = false;
-            neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidth}`;
-            numSandParticles = parseInt(sandAmountSlider.value); 
+            
+            numSandParticles = parseInt(sandAmountSlider.value);
+            updateCanvasAndGridDimensions(numSandParticles); 
+
+            neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidthCells}`;
             sandAmountLabel.textContent = numSandParticles;
-            simulationSpeedMs = parseInt(fallSpeedSlider.value);
+            simulationSpeedMs = parseInt(fallSpeedSlider.value); 
             fallSpeedLabel.textContent = `${simulationSpeedMs}ms`;
             
             if (isDoubleClick) {
@@ -510,17 +646,16 @@
                 canvas.classList.remove('rotate-hourglass');
             }
 
-            initializeGridAndWalls(currentNeckWidth);
+            initializeGridAndWalls(currentNeckWidthCells);
             initializeSand(); 
-            drawGrid();
+            drawGrid(); 
             elapsedStepsDisplay.textContent = `Steps: 0`;
             timerDisplay.textContent = formatTime(0);
             statusDisplay.textContent = "Status: Idle. Click canvas to start.";
         }
 
-        // --- Event Listeners ---
         setMaxSandButton.addEventListener('click', () => {
-            const newMax = parseInt(maxSandAmountInput.value);
+            let newMax = parseInt(maxSandAmountInput.value);
             if (!isNaN(newMax) && newMax >= parseInt(sandAmountSlider.min) && newMax > 0) { 
                 userDefinedMaxSand = newMax;
                 sandAmountSlider.max = userDefinedMaxSand;
@@ -529,10 +664,7 @@
                 }
                 numSandParticles = parseInt(sandAmountSlider.value);
                 sandAmountLabel.textContent = numSandParticles;
-
-                if (!simulationRunning && !simulationComplete) {
-                    resetSimulation();
-                }
+                if (!simulationRunning && !simulationComplete) { resetSimulation(); }
             } else {
                 maxSandAmountInput.value = sandAmountSlider.max; 
             }
@@ -541,16 +673,14 @@
         sandAmountSlider.addEventListener('input', (e) => {
             numSandParticles = parseInt(e.target.value);
             sandAmountLabel.textContent = numSandParticles;
-            if (!simulationRunning && !simulationComplete) { 
-                resetSimulation();
-            } else if (simulationComplete || simulationRunning) { 
-                 statusDisplay.textContent = "Status: Pause & Reset (dbl-click) to change.";
-            }
+            if (!simulationRunning && !simulationComplete) { resetSimulation(); } 
+            else if (simulationComplete || simulationRunning) { statusDisplay.textContent = "Status: Pause & Reset (dbl-click) to change.";}
         });
 
         fallSpeedSlider.addEventListener('input', (e) => {
             simulationSpeedMs = parseInt(e.target.value);
             fallSpeedLabel.textContent = `${simulationSpeedMs}ms`;
+            updateEstimatedTime(); 
             if (simulationRunning) {
                 clearInterval(simulationIntervalId);
                 simulationIntervalId = setInterval(gameLoop, simulationSpeedMs);
@@ -559,100 +689,63 @@
         
         function getCanvasMousePos(event) {
             const rect = canvas.getBoundingClientRect();
-            return {
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top
-            };
+            return { x: event.clientX - rect.left, y: event.clientY - rect.top };
         }
 
         canvas.addEventListener('mousedown', (e) => {
             if (simulationRunning) return; 
-
             const pos = getCanvasMousePos(e);
-            const midPointRows = Math.floor(GRID_ROWS_CONFIG / 2);
-            const topNeckRowCanvas = (midPointRows - Math.floor(NECK_HEIGHT_CELLS / 2)) * CELL_SIZE_CONFIG;
-            const bottomNeckRowCanvas = (midPointRows + Math.ceil(NECK_HEIGHT_CELLS / 2)) * CELL_SIZE_CONFIG;
-            
-            const neckGrabZoneXStart = canvas.width * 0.25; 
-            const neckGrabZoneXEnd = canvas.width * 0.75;
-
-            if (pos.y >= topNeckRowCanvas && pos.y < bottomNeckRowCanvas && 
-                pos.x >= neckGrabZoneXStart && pos.x <= neckGrabZoneXEnd) {
-                isDraggingNeck = true;
-                dragStartX = pos.x;
-                initialNeckWidthAtDragStart = currentNeckWidth;
-                canvas.classList.add('dragging-neck');
-                e.preventDefault(); 
+            const midPointRows = Math.floor(currentGridRows / 2); 
+            const neckHeightActualCells = NECK_HEIGHT_CELLS_PROPORTION;
+            const topNeckRowCanvas = (midPointRows - Math.floor(neckHeightActualCells / 2)) * currentCellSize;
+            const bottomNeckRowCanvas = (midPointRows + Math.ceil(neckHeightActualCells / 2)) * currentCellSize;
+            const neckGrabZoneXStart = canvas.width * 0.25; const neckGrabZoneXEnd = canvas.width * 0.75;
+            if (pos.y >= topNeckRowCanvas && pos.y < bottomNeckRowCanvas && pos.x >= neckGrabZoneXStart && pos.x <= neckGrabZoneXEnd) {
+                isDraggingNeck = true; dragStartX = pos.x; initialNeckWidthAtDragStartCells = currentNeckWidthCells;
+                canvas.classList.add('dragging-neck'); e.preventDefault(); 
             }
         });
 
         canvas.addEventListener('mousemove', (e) => {
             if (!isDraggingNeck) return;
-
-            const pos = getCanvasMousePos(e);
-            const deltaX = pos.x - dragStartX;
-            const neckWidthChange = Math.round(deltaX / NECK_DRAG_SENSITIVITY);
-            
-            let newNeckWidth = initialNeckWidthAtDragStart + neckWidthChange;
-            newNeckWidth = Math.max(MIN_NECK_WIDTH, Math.min(newNeckWidth, MAX_NECK_WIDTH));
-
-            if (newNeckWidth !== currentNeckWidth) {
-                currentNeckWidth = newNeckWidth;
-                neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidth}`; 
-                if (!simulationRunning) { 
-                    resetSimulation();
-                }
+            const pos = getCanvasMousePos(e); const deltaX = pos.x - dragStartX;
+            const neckWidthChangeCells = Math.round(deltaX / (NECK_DRAG_SENSITIVITY * (currentCellSize / 8))); 
+            let newNeckWidthCells = initialNeckWidthAtDragStartCells + neckWidthChangeCells;
+            const maxNeckCells = Math.floor(currentGridCols * 0.4);
+            newNeckWidthCells = Math.max(MIN_NECK_WIDTH_CELLS, Math.min(newNeckWidthCells, maxNeckCells));
+            if (newNeckWidthCells !== currentNeckWidthCells) {
+                currentNeckWidthCells = newNeckWidthCells;
+                neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidthCells}`; 
+                if (!simulationRunning) { resetSimulation(); } 
+                else { updateEstimatedTime(); }
             }
         });
 
         canvas.addEventListener('mouseup', () => {
-            if (isDraggingNeck) {
-                isDraggingNeck = false;
-                canvas.classList.remove('dragging-neck');
-                if (!simulationRunning) {
-                     resetSimulation();
-                }
-            }
+            if (isDraggingNeck) { isDraggingNeck = false; canvas.classList.remove('dragging-neck'); if (!simulationRunning) { resetSimulation();}}
         });
         canvas.addEventListener('mouseleave', () => { 
-            if (isDraggingNeck) {
-                isDraggingNeck = false;
-                canvas.classList.remove('dragging-neck');
-                 if (!simulationRunning) {
-                     resetSimulation();
-                }
-            }
+            if (isDraggingNeck) { isDraggingNeck = false; canvas.classList.remove('dragging-neck'); if (!simulationRunning) { resetSimulation();}}
         });
 
         let clickTimeout = null;
         canvas.addEventListener('click', (e) => {
             if (isDraggingNeck) return; 
-
-            if (clickTimeout === null) {
-                clickTimeout = setTimeout(() => {
-                    clickTimeout = null;
-                    startPauseSimulation();
-                }, 250); 
-            }
+            if (clickTimeout === null) { clickTimeout = setTimeout(() => { clickTimeout = null; startPauseSimulation(); }, 250); }
         });
-
         canvas.addEventListener('dblclick', (e) => {
-            if (isDraggingNeck) return; 
-            clearTimeout(clickTimeout); 
-            clickTimeout = null;
-            resetSimulation(true); 
+            if (isDraggingNeck) return; clearTimeout(clickTimeout); clickTimeout = null; resetSimulation(true); 
         });
 
-        // --- Initial Setup ---
         maxSandAmountInput.value = userDefinedMaxSand; 
         sandAmountSlider.max = userDefinedMaxSand; 
         sandAmountSlider.value = numSandParticles; 
         sandAmountLabel.textContent = numSandParticles; 
         fallSpeedSlider.value = simulationSpeedMs;
         fallSpeedLabel.textContent = `${simulationSpeedMs}ms`;
-        neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidth}`; 
+        neckWidthDisplay.textContent = `Neck Width: ${currentNeckWidthCells}`; 
+        updateCanvasAndGridDimensions(numSandParticles); 
         resetSimulation();
-
     </script>
 </body>
 </html>
